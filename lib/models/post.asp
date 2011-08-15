@@ -50,28 +50,7 @@ Class cPost
 		con.Close
 		Set all = rs
 	End Function
-
-	Public Function save()
-		Dim con,rs
-		Set con = Server.CreateObject("ADODB.Connection")
-		Set rs  = Server.CreateObject("ADODB.RecordSet")
-		
-		con.ConnectionString = "File Name=C:\inetpub\wwwroot\aspblOOg\aspblOOg.udl;"
-		con.Open
-
-		rs.Open "posts",con,3,3
-
-		rs.AddNew
-			rs.Fields("title") = Me.title
-			rs.Fields("content") = Me.content
-			rs.Fields("created_at") = ""&Time&""&Date&""
-			rs.Fields("updated_at") = rs.Fields("created_at")
-		rs.Update
-
-		rs.Close
-		con.Close
-	End Function
-
+	
 	Public Function find(post_id)
 		Dim con,rs,post,sql
 		Set con = Server.CreateObject("ADODB.Connection")
@@ -91,12 +70,33 @@ Class cPost
 			find = Me.id
 			mvarSaveOnTerminate = true			
 		else
-			err.raise 1, "Item with ID " &post_id& " was not found"
+			Set find = Nothing
 		end if
 		rs.close
 		con.close
 	End Function
-	
+
+	Public Function save()
+		Dim con,rs,post
+		Set con = Server.CreateObject("ADODB.Connection")
+		Set rs  = Server.CreateObject("ADODB.RecordSet")
+		
+		con.ConnectionString = "File Name=C:\inetpub\wwwroot\aspblOOg\aspblOOg.udl;"
+		con.Open
+
+		rs.Open "posts",con,3,3
+
+		rs.AddNew
+			rs.Fields("title") = Me.title
+			rs.Fields("content") = Me.content
+			rs.Fields("created_at") = ""&Time&""&Date&""
+			rs.Fields("updated_at") = rs.Fields("created_at")
+		rs.Update
+
+		rs.Close
+		con.Close
+	End Function
+		
 	Public Function delete()
 		Dim con,rs,sql
 		Set con = Server.CreateObject("ADODB.Connection")
@@ -106,14 +106,29 @@ Class cPost
 		con.ConnectionString = "File Name=C:\inetpub\wwwroot\aspblOOg\aspblOOg.udl;"
 		con.Open
 
-		rs.Open sql,con,1,3
-		con.Close
+		rs.Open sql,con,1,3		
+		con.Close		
 	End Function
 	
 	Public Function update()
 		Dim con,rs,sql
 		Set con = Server.CreateObject("ADODB.Connection")
 		Set rs  = Server.CreateObject("ADODB.RecordSet")
+		
+		con.ConnectionString = "File Name=C:\inetpub\wwwroot\aspblOOg\aspblOOg.udl;"
+		con.Open
+
+		rs.Open "posts",con,3,3
+		rs.Find "id="&Me.id&""
+		If rs.EOF Then
+			update = Nothing
+		Else
+			rs.Fields("title") = Me.title
+			rs.Fields("content") = Me.content			
+			rs.Fields("updated_at") = ""&Time&""&Date&""
+			rs.update
+		End if
+		con.Close
 	End Function
 
 	Public Function first()
@@ -135,7 +150,7 @@ Class cPost
 		if id <> 0 then
 			first = Me.find(id)
 		else
-			err.raise 1, "No posts found"
+			Set last = Nothing
 		end if
 		con.close		
 	End Function
@@ -160,7 +175,7 @@ Class cPost
 		if id <> 0 then
 			last = Me.find(id)
 		else
-			err.raise 1, "No posts found"
+			Set last = Nothing
 		end if
 		
 	End Function

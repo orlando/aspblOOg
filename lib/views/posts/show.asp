@@ -5,6 +5,7 @@ Set post = New cPost
 post.last
 
 response.Write(post.id)
-response.Write(post.title)
 response.Write(post.content)
- %>
+response.Write(post.title)
+response.Write(""&Date&" "&Time&"")
+%>
