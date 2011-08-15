@@ -6,7 +6,6 @@ Set post = New cPost
 post.id = Request.Form("id")
 post.title = Request.Form("title")
 post.content = Request.Form("content")
-post.update
 
-Response.Write "<div class='success'>Post Updated</div>"
+post.update
 %>

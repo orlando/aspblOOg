@@ -14,7 +14,9 @@
 	<link rel="stylesheet" href="public/css/colorbox.css" type="text/css" media="screen"/>
 	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.6.2/jquery.min.js"></script>
 	<script src="public/js/jquery.colorbox.js"></script>	
+	<script src="public/js/jquery.jeditable.js"></script>
 	<script src="public/js/app.js"></script>
+	
   <!-- Fonts -->
     <link href='http://fonts.googleapis.com/css?family=Pacifico' rel='stylesheet' type='text/css'>
 </head>
@@ -32,7 +34,7 @@
 						Set rs = post.all
 																	
 						if rs.RecordCount <> 0 Then
-							Response.Write "<a id='deletepost' class='opacity' href='#' onclick='showDeleteIcons()'>Delete Post</a>"
+							Response.Write "<a id='deletepost' class='opacity' href='#' onclick='enableEdit()'>Edit Posts</a>"
 						end if					
 						%>						
 					</li>					
@@ -43,8 +45,8 @@
     <content class="span-24">
 		<%
 			While Not rs.EOF
-				Response.Write "<div id='post-"&rs("id")&"'><div class='post-title'>" & rs("id") & "-" & rs("title") & "<img class='deletepost-icon' src='public/images/delete_icon.png' onclick='deletePost("&trim(rs("id"))&")' /></div>"
-				Response.Write "<div class='post-content prepend-1 append-1'>" & rs("content") & "</div></div>"								 
+				Response.Write "<div id='post-"&rs("id")&"'><div id='title-"&rs("id")&"' class='post-title'>"& rs("title") & "<img class='deletepost-icon' src='public/images/delete_icon.png' onclick='deletePost("&trim(rs("id"))&")' /></div>"
+				Response.Write "<div id='content-"&rs("id")&"' class='post-content prepend-1 append-1'>" & rs("content") & "</div></div>"								 
 				rs.MoveNext
 			Wend
 			Set rs = Nothing		
